@@ -3,11 +3,10 @@ const EventEmitter = require('events').EventEmitter;
 const http = require('http');
 const fs = require('fs');
 
-http.get({
-    hostname: 'wy-greenriver.civicplus.com',
-    port: 80,
-    path: '/files/files/island/snap_c1.jpg',
-    agent: false  // create a new agent just for this one request
-}, (res) => (
-    console.log(res)
-) );
+
+http.get('http://wy-greenriver.civicplus.com/files/files/island/snap_c1.jpg', (result) => {
+    const jpgDest = fs.createWriteStream('img/snap.jpg');
+    result.pipe(jpgDest);
+}).on('error', (e) => {
+    console.error(`Got error: ${e.message}`);
+});
